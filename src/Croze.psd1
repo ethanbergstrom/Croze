@@ -1,17 +1,15 @@
 @{
 	RootModule = 'Croze.psm1'
 	ModuleVersion = '0.0.1'
-	GUID = '9f295092-e7fd-4c52-b41e-3c5b0612fa52'
+	GUID = '46caec03-e808-4fa2-b464-14677bb60c52'
 	Author = 'Ethan Bergstrom'
-	Copyright = '2021'
+	Copyright = '2022'
 	Description = 'A PowerShell Crescendo wrapper for HomeBrew'
-	# Crescendo modules aren't supported below PowerShell 5.1
-	# https://devblogs.microsoft.com/powershell/announcing-powershell-crescendo-preview-1/
-	PowerShellVersion = '5.1'
+	PowerShellVersion = '7.0'
 	PrivateData = @{
 		PSData = @{
-			# Tags applied to this module to indicate this is a PackageManagement Provider.
-			Tags = @('Crescendo','HomeBrew','PSEdition_Desktop','PSEdition_Core','Windows','CrescendoBuilt')
+			# Tags applied to this module to indicate this is a module for Linux and Windows.
+			Tags = @('Crescendo','HomeBrew','Brew','PSEdition_Core','MacOS','Linux','CrescendoBuilt')
 
 			# A URL to the license for this module.
 			LicenseUri = 'https://github.com/ethanbergstrom/Croze/blob/main/LICENSE.txt'
