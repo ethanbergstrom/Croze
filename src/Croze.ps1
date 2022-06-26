@@ -56,26 +56,22 @@ $Commands = @(
 
                         if ($output -match 'Pouring') {
                             # Formula output - capture package and dependency name and version
-                            $packageInfo = @{}
-
                             $output | Select-String 'Pouring (?<name>\S+)(?=--)--(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
                                 $match = ($_.Groups | Select-Object -Skip 1).Value
-                                $packageInfo.add($match[0],$match[1])
+
+                                [PSCustomObject]@{
+                                    Name = $match[0]
+                                    Version = $match[1]
+                                }
                             }
-
-                            $packageInfo
                         } elseif ($output -match 'was successfully') {
-                            
                             # Cask output - capture package only
-                            $packageInfo = @{}
-
                             $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches | ForEach-Object {
                                 $match = ($_.Groups | Select-Object -Skip 1).Value
-                                $packageInfo.add($match)
+                                [PSCustomObject]@{
+                                    Name = $match
+                                }
                             }
-
-                            $packageInfo
-                            Write-Error ($output)
                         }
                     }
                 }

@@ -190,7 +190,7 @@ Describe 'package metadata retrieval' {
 			Get-HomeBrewPackageInfo -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
 		}
 		It 'returns package versions' {
-			(Get-HomeBrewPackageInfo -Name $package -Cask).Contains($versions) | Should -Be $true
+			(Get-HomeBrewPackageInfo -Name $package -Cask).versions | Should -Not -BeNullOrEmpty
 		}
 	}
 }
