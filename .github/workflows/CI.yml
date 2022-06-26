@@ -46,6 +46,7 @@ jobs:
           name: module
           path: ~/.local/share/powershell/Modules/Croze/
       - name: Test with Pester
+        shell: pwsh
         run: |
           # Required for Crescendo-generated modules to interpret 
           [Console]::OutputEncoding = [System.Text.Encoding]::UTF8;
