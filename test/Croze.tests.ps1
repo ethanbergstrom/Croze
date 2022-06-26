@@ -21,7 +21,7 @@ Describe 'basic package search operations' {
 Describe 'DSC-compliant package installation and uninstallation' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'jq'
+			$package = 'tmux'
 		}
 
 		It 'searches for the latest version of a package' {
@@ -39,7 +39,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'jq'
+			$package = 'tmux'
 		}
 
 		It 'searches for the latest version of a package' {
@@ -60,7 +60,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 	}
 	Context 'with casks' {
 		BeforeAll {
-			$package = 'firefox'
+			$package = 'discord'
 		}
 
 		It 'searches for the latest version of a package' {
@@ -84,7 +84,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 Describe 'pipline-based package installation and uninstallation' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'jq'
+			$package = 'tmux'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -96,7 +96,7 @@ Describe 'pipline-based package installation and uninstallation' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'jq'
+			$package = 'tmux'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -108,7 +108,7 @@ Describe 'pipline-based package installation and uninstallation' {
 	}
 	Context 'with casks' {
 		BeforeAll {
-			$package = 'firefox'
+			$package = 'discord'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -124,7 +124,7 @@ Describe 'pipline-based package installation and uninstallation' {
 # Describe 'package upgrade' {
 # 	Context 'with formulae' {
 # 		BeforeAll {
-# 			$package = 'jq'
+# 			$package = 'tmux'
 # 			$version = '1.95'
 # 			Install-HomeBrewPackage -Name $package -Version $version
 # 		}
@@ -159,7 +159,7 @@ Describe 'pipline-based package installation and uninstallation' {
 Describe 'package metadata retrieval' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'jq'
+			$package = 'tmux'
 		}
 
 		It 'returns package metadata' {
@@ -171,7 +171,7 @@ Describe 'package metadata retrieval' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'jq'
+			$package = 'tmux'
 		}
 
 		It 'returns package metadata' {
@@ -183,7 +183,7 @@ Describe 'package metadata retrieval' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'firefox'
+			$package = 'discord'
 		}
 
 		It 'returns package metadata' {

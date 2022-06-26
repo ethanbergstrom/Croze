@@ -70,7 +70,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: HomeBrew-logs
-          path: ~/Library/Logs/Homebrew/
+          path: "~/Library/Logs/Homebrew/"
   Results:
     needs: Test
     if: success() || failure()
