@@ -45,6 +45,9 @@ jobs:
         with:
           name: module
           path: ~/.local/share/powershell/Modules/Croze/
+      - name: Get example 
+        shell: pwsh
+        run: brew search jq
       - name: Test with Pester
         shell: pwsh
         run: |
