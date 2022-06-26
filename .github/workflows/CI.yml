@@ -36,7 +36,7 @@ jobs:
           path: ./src/
   Test:
     needs: Build
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -44,10 +44,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: module
-          path: C:\Users\runneradmin\Documents\PowerShell\Modules\Cobalt\
-      - name: Install WinGet
-        shell: pwsh
-        run: .\Install-WinGet.ps1
+          path: ~/.local/share/powershell/Modules/Croze/
       - name: Test with Pester
         run: |
           # Required for Crescendo-generated modules to interpret 
@@ -67,12 +64,12 @@ jobs:
         with:
           name: test-results
           path: testResults.xml
-      - name: Upload WinGet logs
+      - name: Upload HomeBrew logs
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: WinGet-logs
-          path: C:\Users\runneradmin\AppData\Local\Packages\Microsoft.DesktopAppInstaller*\LocalState\DiagOutputDir\
+          name: HomeBrew-logs
+          path: ~/Library/Logs/Homebrew/
   Results:
     needs: Test
     if: success() || failure()
@@ -96,9 +93,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: module
-          path: '~/.local/share/powershell/Modules/Cobalt'
+          path: '~/.local/share/powershell/Modules/Croze'
       - name: Publish Module
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
         shell: pwsh
-        run: Write-Output "Publishing..."; Publish-Module -Name Cobalt -NuGetApiKey $env:NUGET_KEY -Exclude @('Cobalt.ps1')
+        run: Write-Output "Publishing..."; Publish-Module -Name Croze -NuGetApiKey $env:NUGET_KEY -Exclude @('Croze.ps1')

@@ -1,4 +1,4 @@
-. (Join-Path -Path src -ChildPath Cobalt.ps1 -Resolve)
+. (Join-Path -Path src -ChildPath Croze.ps1 -Resolve)
 
 $tempJsonArray = @()
 
@@ -37,4 +37,4 @@ $commands | ForEach-Object {
 	}
 }
 
-Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName (Join-Path -Path src -ChildPath Cobalt.psm1) -Force
+Export-CrescendoModule -ConfigurationFile $tempJsonArray -ModuleName (Join-Path -Path src -ChildPath Croze.psm1) -Force
