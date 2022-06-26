@@ -58,7 +58,7 @@ $Commands = @(
                             # Formula output - capture package and dependency name and version
                             $packageInfo = @{}
 
-                            $output | Select-String 'Pouring (?<name>\S+)(?=--)--(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object{
+                            $output | Select-String 'Pouring (?<name>\S+)(?=--)--(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
                                 $match = ($_.Groups | Select-Object -Skip 1).Value
                                 $packageInfo.add($match[0],$match[1])
                             }
@@ -69,9 +69,9 @@ $Commands = @(
                             # Cask output - capture package only
                             $packageInfo = @{}
 
-                            $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches | ForEach-Object{
+                            $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches | ForEach-Object {
                                 $match = ($_.Groups | Select-Object -Skip 1).Value
-                                $packageInfo.add($match[0],$match[1])
+                                $packageInfo.add($match)
                             }
 
                             $packageInfo
