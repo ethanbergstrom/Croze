@@ -115,22 +115,18 @@ $Commands = @(
                     Handler = {
                         param ( $output )
 
-                        # These are convoluted, but for reasons I've been unable to determine, sometimes Brew returns a space after the arrow, and sometimes it doesn't
-                        $formulaeStartIndex = $output.IndexOf(
-                            $(
-                                $output | Select-String '==>\s*Formulae' | 
-                                    ForEach-Object -MemberName Matches | 
-                                        Select-Object -ExpandProperty Value
-                            )
-                        )
-
-                        $casksStartIndex = $output.IndexOf(
-                            $(
-                                $output | Select-String '==>\s*Casks' | 
-                                    ForEach-Object -MemberName Matches | 
-                                        Select-Object -ExpandProperty Value
-                            )
-                        )
+                        $output | Select-String '==>' | Select-Object -ExpandProperty LineNumber | ForEach-Object {
+                            # The line numbers from Select-Object start at 1 instead of 0
+                            $index = $_ - 1
+                            switch -WildCard ($output[$index]) {
+                                '*Formulae*' {
+                                    $formulaeStartIndex = $index
+                                }
+                                '*Casks*' {
+                                    $casksStartIndex = $index
+                                }
+                            }   
+                        }
                         
                         # Determine the range of formulae output based on whether we also have cask output
                         $formulaeEndIndex = $(
