@@ -48,7 +48,7 @@ jobs:
       - name: Get example 
         shell: pwsh
         run: |
-          Import-Module Crozer
+          Import-Module Croze
           $package = 'tmux'
           Find-HomeBrewPackage -Name $package
       # - name: Test with Pester
