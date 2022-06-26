@@ -115,11 +115,22 @@ $Commands = @(
                     Handler = {
                         param ( $output )
 
-                        # Do we have formulae in the results?
-                        $formulaeStartIndex = $output.IndexOf('==> Formulae')
-                        
-                        # Do we have casks in the results?
-                        $casksStartIndex = $output.IndexOf('==> Casks')
+                        # These are convoluted, but for reasons I've been unable to determine, sometimes Brew returns a space after the arrow, and sometimes it doesn't
+                        $formulaeStartIndex = $output.IndexOf(
+                            $(
+                                $output | Select-String '==>\s*Formulae' | 
+                                    ForEach-Object -MemberName Matches | 
+                                        Select-Object -ExpandProperty Value
+                            )
+                        )
+
+                        $casksStartIndex = $output.IndexOf(
+                            $(
+                                $output | Select-String '==>\s*Casks' | 
+                                    ForEach-Object -MemberName Matches | 
+                                        Select-Object -ExpandProperty Value
+                            )
+                        )
                         
                         # Determine the range of formulae output based on whether we also have cask output
                         $formulaeEndIndex = $(
