@@ -45,10 +45,10 @@ jobs:
         with:
           name: module
           path: ~/.local/share/powershell/Modules/Croze/
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-        with:
-          limit-access-to-actor: true
+      # - name: Setup upterm session
+      #   uses: lhotari/action-upterm@v1
+      #   with:
+      #     limit-access-to-actor: true
       - name: Test with Pester
         shell: pwsh
         run: |
