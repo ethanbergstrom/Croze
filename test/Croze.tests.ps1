@@ -165,9 +165,6 @@ Describe 'package metadata retrieval' {
 		It 'returns package metadata' {
 			Get-HomeBrewPackageInfo -Name $package | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
 		}
-		It 'returns package versions' {
-			(Get-HomeBrewPackageInfo -Name $package).Contains($versions) | Should -Be $true
-		}
 	}
 	Context 'with formulae' {
 		BeforeAll {
@@ -177,20 +174,14 @@ Describe 'package metadata retrieval' {
 		It 'returns package metadata' {
 			Get-HomeBrewPackageInfo -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
 		}
-		It 'returns package versions' {
-			(Get-HomeBrewPackageInfo -Name $package -Formula).Contains($versions) | Should -Be $true
-		}
 	}
-	Context 'with formulae' {
+	Context 'with casks' {
 		BeforeAll {
 			$package = 'discord'
 		}
 
 		It 'returns package metadata' {
-			Get-HomeBrewPackageInfo -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
-		}
-		It 'returns package versions' {
-			(Get-HomeBrewPackageInfo -Name $package -Cask).versions | Should -Not -BeNullOrEmpty
+			Get-HomeBrewPackageInfo -Name $package -Cask | Where-Object {$_.Token -eq $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 }
