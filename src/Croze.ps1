@@ -115,8 +115,6 @@ $Commands = @(
                     Handler = {
                         param ( $output )
 
-                        $result = @()
-
                         # Do we have formulae in the results?
                         $formulaeStartIndex = $output.IndexOf('==> Formulae')
                         
@@ -138,28 +136,22 @@ $Commands = @(
                         )
                         
                         if ($formulaeStartIndex -ne -1) {
-                            $result += $output[($formulaeStartIndex+1)..$formulaeEndIndex] | Select-Object -Property @{
-                                Name = 'Name'
-                                Expression = {$_}
-                            },
-                            @{
-                                Name = 'Type'
-                                Expression = {'Formula'}
+                            $output[($formulaeStartIndex+1)..$formulaeEndIndex] | ForEach-Object {
+                                [PSCustomObject]@{
+                                    Name = $_
+                                    Type = 'Formula'
+                                }
                             }
                         }
                         
                         if ($casksStartIndex -ne -1) {
-                            $result += $output[($casksStartIndex+1)..($output.Length)] | Select-Object -Property @{
-                                Name = 'Name'
-                                Expression = {$_}
-                            },
-                            @{
-                                Name = 'Type'
-                                Expression = {'Cask'}
+                            $result += $output[($casksStartIndex+1)..($output.Length)] | ForEach-Object {
+                                [PSCustomObject]@{
+                                    Name = $_
+                                    Type = 'Cask'
+                                }
                             }
                         }
-                        
-                        $result
                     }
                 }
             },
