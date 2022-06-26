@@ -145,7 +145,7 @@ $Commands = @(
                         }
                         
                         if ($casksStartIndex -ne -1) {
-                            $result += $output[($casksStartIndex+1)..($output.Length)] | ForEach-Object {
+                            $output[($casksStartIndex+1)..($output.Length)] | ForEach-Object {
                                 [PSCustomObject]@{
                                     Name = $_
                                     Type = 'Cask'
