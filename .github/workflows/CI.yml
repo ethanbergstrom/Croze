@@ -50,7 +50,7 @@ jobs:
         run: |
           Import-Module Croze
           $package = 'tmux'
-          Find-HomeBrewPackage -Name $package
+          Find-HomeBrewPackage -Name $package -Verbose
       # - name: Test with Pester
       #   shell: pwsh
       #   run: |
