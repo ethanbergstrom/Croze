@@ -51,6 +51,7 @@ jobs:
           Import-Module Croze
           $package = 'tmux'
           Find-HomeBrewPackage -Name $package -Verbose
+          brew search tmux
       # - name: Test with Pester
       #   shell: pwsh
       #   run: |
