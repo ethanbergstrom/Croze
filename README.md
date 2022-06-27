@@ -81,9 +81,5 @@ Find-HomeBrewPackage pyroscope-io/brew/pyroscope | Install-HomeBrewPackage
 Unregister-HomeBrewTap pyroscope-io/brew
 ```
 
-## Known Issues
-### Stability
-HomeBrew's behavior and APIs are still very unstable. Do not be surprised if this module stops working with newer versions of HomeBrew.
-
 ## Legal and Licensing
 Croze is licensed under the [MIT license](./LICENSE.txt).
