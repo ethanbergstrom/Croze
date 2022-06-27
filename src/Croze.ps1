@@ -11,6 +11,33 @@ $BaseOutputHandlers = @{
     }
 }
 
+$PackageInstallHandlers = @{
+    ParameterSetName = 'Default'
+    Handler = {
+        param ( $output )
+
+        if ($output -match 'Pouring') {
+            # Formula output - capture package and dependency name and version
+            $output | Select-String 'Pouring (?<name>\S+)(?<=\w)(-+)(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
+                $match = ($_.Groups | Where-Object Name -in 'name','version').Value
+
+                [PSCustomObject]@{
+                    Name = $match[0]
+                    Version = $match[1]
+                }
+            }
+        } elseif ($output -match 'was successfully') {
+            # Cask output - capture package only
+            $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches | ForEach-Object {
+                $match = ($_.Groups | Where-Object Name -eq 'name').Value
+                [PSCustomObject]@{
+                    Name = $match
+                }
+            }
+        }
+    }
+}
+
 # The general structure of this hashtable is to define noun-level attributes, which are -probably- common across all commands for the same noun, but still allow for customization at more specific verb-level defition for that noun.
 # The following three command attributes have the following order of precedence:
 # 	OriginalCommandElements will be MERGED in the order of Noun + Verb + Base
@@ -104,32 +131,7 @@ $Commands = @(
                 Verb = 'Install'
                 Description = 'Install a new package with HomeBrew'
                 OriginalCommandElements = @('install')
-                OutputHandlers = @{
-                    ParameterSetName = 'Default'
-                    Handler = {
-                        param ( $output )
-
-                        if ($output -match 'Pouring') {
-                            # Formula output - capture package and dependency name and version
-                            $output | Select-String 'Pouring (?<name>\S+)(?<=\w)(-+)(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
-                                $match = ($_.Groups | Where-Object Name -in 'name','version').Value
-
-                                [PSCustomObject]@{
-                                    Name = $match[0]
-                                    Version = $match[1]
-                                }
-                            }
-                        } elseif ($output -match 'was successfully') {
-                            # Cask output - capture package only
-                            $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches | ForEach-Object {
-                                $match = ($_.Groups | Where-Object Name -eq 'name').Value
-                                [PSCustomObject]@{
-                                    Name = $match
-                                }
-                            }
-                        }
-                    }
-                }
+                OutputHandlers = $PackageInstallHandlers
             },
             @{
                 Verb = 'Get'
@@ -224,35 +226,7 @@ $Commands = @(
                 Verb = 'Update'
                 Description = 'Updates an installed package to the latest version'
                 OriginalCommandElements = @('upgrade')
-                OutputHandlers = @{
-                    ParameterSetName = 'Default'
-                    Handler = {
-                        param ( $output )
-
-                        if ($output -match 'Pouring') {
-                            # Formula output - capture package and dependency name and version
-                            $packageInfo = @{}
-
-                            $output | Select-String 'Pouring (?<name>\S+)(?=--)--(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
-                                $match = ($_.Groups | Select-Object -Skip 1).Value
-                                $packageInfo.add($match[0],$match[1])
-                            }
-
-                            $packageInfo
-                        } elseif ($output -match 'was successfully') {
-                            # Successful Cask output. We should be able to get the new version of the upgraded package
-                            $output | Select-String '(?<name>\S+) (?<oldVerison>\S+) -> (?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
-                                $match = ($_.Groups | Select-Object -Skip 1).Value
-                                $packageInfo.add($match[0],$match[1])
-                            }
-
-                            $packageInfo
-                        } else {
-                            # Cask output - does not have much useful output other than if installation fails
-                            if ($output) {Write-Error ($output)}
-                        }
-                    }
-                }
+                OutputHandlers = $PackageInstallHandlers
             },
             @{
                 Verb = 'Uninstall'
@@ -294,12 +268,10 @@ $Commands = @(
                     Handler = {
                         param ( $output )
 
-                        $result = @()
-
-                        $result += $output | ConvertFrom-Json | Select-Object -ExpandProperty formulae
-                        $result += $output | ConvertFrom-Json | Select-Object -ExpandProperty casks
-
-                        $result
+                        $output | ConvertFrom-Json | ForEach-Object {
+                            $_.formulae
+                            $_.casks
+                        }
                     }
                 }
             }
