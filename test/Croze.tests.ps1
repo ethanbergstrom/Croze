@@ -25,13 +25,13 @@ Describe 'DSC-compliant package installation and uninstallation' {
 		}
 
 		It 'searches for the latest version of a package' {
-			Find-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Find-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently installs the latest version of a package' {
-			Install-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Install-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'finds the locally installed package just installed' {
-			Get-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Get-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently uninstalls the locally installed package just installed' {
 			{Uninstall-HomeBrewPackage -Name $package} | Should -Not -Throw
@@ -43,13 +43,13 @@ Describe 'DSC-compliant package installation and uninstallation' {
 		}
 
 		It 'searches for the latest version of a package' {
-			Find-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Find-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently installs the latest version of a package' {
-			Install-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Install-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'finds the locally installed package just installed' {
-			Get-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Get-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'does NOT find the locally installed package just installed with the wrong type flag' {
 			Get-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -BeNullOrEmpty
@@ -60,17 +60,17 @@ Describe 'DSC-compliant package installation and uninstallation' {
 	}
 	Context 'with casks' {
 		BeforeAll {
-			$package = 'discord'
+			$package = 'gimp'
 		}
 
 		It 'searches for the latest version of a package' {
-			Find-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Find-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently installs the latest version of a package' {
-			Install-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Install-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'finds the locally installed package just installed' {
-			Get-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Get-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'does NOT find the locally installed package just installed with the wrong type flag' {
 			Get-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -BeNullOrEmpty
@@ -88,7 +88,7 @@ Describe 'pipline-based package installation and uninstallation' {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -Not -BeNullOrEmpty
+			Find-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -HaveCount 1
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
 			{Get-HomeBrewPackage -Name $package | Uninstall-HomeBrewPackage} | Should -Not -Throw
@@ -100,7 +100,7 @@ Describe 'pipline-based package installation and uninstallation' {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -Not -BeNullOrEmpty
+			Find-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -HaveCount 1
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
 			{Get-HomeBrewPackage -Name $package -Formula | Uninstall-HomeBrewPackage} | Should -Not -Throw
@@ -108,11 +108,11 @@ Describe 'pipline-based package installation and uninstallation' {
 	}
 	Context 'with casks' {
 		BeforeAll {
-			$package = 'discord'
+			$package = 'gimp'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -Not -BeNullOrEmpty
+			Find-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -HaveCount 1
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
 			{Get-HomeBrewPackage -Name $package -Cask | Uninstall-HomeBrewPackage} | Should -Not -Throw
@@ -156,6 +156,29 @@ Describe 'pipline-based package installation and uninstallation' {
 # 	}
 # }
 
+Describe "multi-source support" {
+	BeforeAll {
+		$tapName = 'pyroscope-io/brew'
+		$package = join-path -path $tapName -ChildPath 'pyroscope'
+	}
+
+	It 'registers an alternative tap, assuming just GitHub userame' {
+		{ Register-HomeBrewTap -Name $tapName } | Should -Not -Throw
+		Get-HomeBrewTap | Where-Object {$_.Name -eq $tapName} | Should -HaveCount 1
+	}
+	It 'searches for and installs the latest version of a package from an alternate source' {
+		Find-HomeBrewPackage -Name $package | Should -Not -BeNullOrEmpty
+		Install-HomeBrewPackage -Name $package | Should -HaveCount 1
+	}
+	It 'finds and uninstalls a package installed from an alternate source' {
+		{ Get-HomeBrewPackage -Name $package | Uninstall-HomeBrewPackage } | Should -Not -Throw
+	}
+	It 'unregisters an alternative tap with a full URL' {
+		Unregister-HomeBrewTap -Name $tapName
+		Get-HomeBrewTap | Where-Object {$_.Name -eq $tapName} | Should -BeNullOrEmpty
+	}
+}
+
 Describe 'package metadata retrieval' {
 	Context 'without additional arguments' {
 		BeforeAll {
@@ -177,7 +200,7 @@ Describe 'package metadata retrieval' {
 	}
 	Context 'with casks' {
 		BeforeAll {
-			$package = 'discord'
+			$package = 'gimp'
 		}
 
 		It 'returns package metadata' {

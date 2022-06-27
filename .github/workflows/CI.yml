@@ -52,7 +52,6 @@ jobs:
       - name: Test with Pester
         shell: pwsh
         run: |
-          # Required for Crescendo-generated modules to interpret 
           Invoke-Pester -Configuration (New-PesterConfiguration -Hashtable @{
             Run = @{
               Exit = $true

@@ -4,7 +4,7 @@
 Croze is a simple PowerShell Crescendo wrapper for HomeBrew
 
 ## Requirements
-In addition to PowerShell 5.1+ and an Internet connection on a Windows machine, HomeBrew must also be installed.
+In addition to PowerShell 7+ and an Internet connection on a Windows machine, [HomeBrew](https://brew.sh/) must also be installed.
 
 ## Install Croze
 ```PowerShell
@@ -48,7 +48,7 @@ Install-HomeBrewPackage jq
 
 ### Get list of installed packages
 ```PowerShell
-Get-HomeBrewPackage nodejs
+Get-HomeBrewPackage jq
 ```
 
 ### Upgrade a package
@@ -69,9 +69,16 @@ Update-HomeBrewPackage
 
 ### Uninstall a package
 ```PowerShell
-Get-HomeBrewPackage nodejs | Uninstall-HomeBrewPackage
+Get-HomeBrewPackage jq | Uninstall-HomeBrewPackage
 
 Uninstall-HomeBrewPackage firefox
+```
+
+### Manage package sources
+```PowerShell
+Register-HomeBrewTap pyroscope-io/brew
+Find-HomeBrewPackage pyroscope-io/brew/pyroscope | Install-HomeBrewPackage
+Unregister-HomeBrewTap pyroscope-io/brew
 ```
 
 ## Known Issues

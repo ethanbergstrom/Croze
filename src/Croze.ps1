@@ -23,6 +23,61 @@ $BaseOutputHandlers = @{
 #		Example 2: The native commands for Register-HomeBrewSource and Unregister-HomeBrewSource don't return any output, and until Crescendo supports error handling by exit codes, a base required default output handler that doesn't do anything can be defined and reused in multiple places.
 $Commands = @(
     @{
+        Noun = 'HomeBrewTap'
+        Verbs = @(
+            @{
+                Verb = 'Get'
+                Description = 'Return HomeBrew taps'
+                OriginalCommandElements = @('tap')
+                OutputHandlers = @{
+                    ParameterSetName = 'Default'
+                    Handler = {
+                        param ($output)
+                        if ($output) {
+                            $output | ForEach-Object {
+                                [PSCustomObject]@{
+                                    Name = $_
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            @{
+                Verb = 'Register'
+                Description = 'Register a new HomeBrew tap'
+                OriginalCommandElements = @('tap')
+                Parameters = @(
+                    @{
+                        Name = 'Name'
+                        ParameterType = 'string'
+                        Description = 'Source Name'
+                        Mandatory = $true
+                    },
+                    @{
+                        Name = 'Location'
+                        ParameterType = 'string'
+                        Description = 'Source Location'
+                    }
+                )
+            },
+            @{
+                Verb = 'Unregister'
+                Description = 'Unregister an existing HomeBrew tap'
+                OriginalCommandElements = @('untap','-f')
+                Parameters = @(
+                    @{
+                        Name = 'Name'
+                        ParameterType = 'string'
+                        Description = 'Source Name'
+                        Mandatory = $true
+                        ValueFromPipelineByPropertyName = $true
+                    }
+                )
+            }
+        )
+    },
+    @{
         Noun = 'HomeBrewPackage'
         Parameters = @(
             @{
@@ -56,8 +111,8 @@ $Commands = @(
 
                         if ($output -match 'Pouring') {
                             # Formula output - capture package and dependency name and version
-                            $output | Select-String 'Pouring (?<name>\S+)(?=--)--(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
-                                $match = ($_.Groups | Select-Object -Skip 1).Value
+                            $output | Select-String 'Pouring (?<name>\S+)(?<=\w)(-+)(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
+                                $match = ($_.Groups | Where-Object Name -in 'name','version').Value
 
                                 [PSCustomObject]@{
                                     Name = $match[0]
@@ -67,7 +122,7 @@ $Commands = @(
                         } elseif ($output -match 'was successfully') {
                             # Cask output - capture package only
                             $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches | ForEach-Object {
-                                $match = ($_.Groups | Select-Object -Skip 1).Value
+                                $match = ($_.Groups | Where-Object Name -eq 'name').Value
                                 [PSCustomObject]@{
                                     Name = $match
                                 }
@@ -115,47 +170,50 @@ $Commands = @(
                     Handler = {
                         param ( $output )
 
-                        $output | Select-String '==>' | Select-Object -ExpandProperty LineNumber | ForEach-Object {
-                            # The line numbers from Select-Object start at 1 instead of 0
-                            $index = $_ - 1
-                            switch -WildCard ($output[$index]) {
-                                '*Formulae*' {
-                                    $formulaeStartIndex = $index
+                        if ($output) {
+
+                            $output | Select-String '==>' | Select-Object -ExpandProperty LineNumber | ForEach-Object {
+                                # The line numbers from Select-Object start at 1 instead of 0
+                                $index = $_ - 1
+                                switch -WildCard ($output[$index]) {
+                                    '*Formulae*' {
+                                        $formulaeStartIndex = $index
+                                    }
+                                    '*Casks*' {
+                                        $casksStartIndex = $index
+                                    }
+                                }   
+                            }
+                            
+                            # Determine the range of formulae output based on whether we also have cask output
+                            $formulaeEndIndex = $(
+                                if ($formulaeStartIndex) {
+                                    if ($casksStartIndex) {
+                                        # Stop capturing formulae output two rows before the start of the Cask index
+                                        $casksStartIndex-2
+                                    }
+                                    else {
+                                        # Capture to the entire output
+                                        $output.Length
+                                    }
                                 }
-                                '*Casks*' {
-                                    $casksStartIndex = $index
-                                }
-                            }   
-                        }
-                        
-                        # Determine the range of formulae output based on whether we also have cask output
-                        $formulaeEndIndex = $(
-                            if ($formulaeStartIndex -ne -1) {
-                                if ($casksStartIndex -ne -1) {
-                                    # Stop capturing formulae output two rows before the start of the Cask index
-                                    $casksStartIndex-2
-                                }
-                                else {
-                                    # Capture to the entire output
-                                    $output.Length
+                            )
+                            
+                            if ($formulaeStartIndex) {
+                                $output[($formulaeStartIndex+1)..$formulaeEndIndex] | ForEach-Object {
+                                    [PSCustomObject]@{
+                                        Name = $_
+                                        Type = 'Formula'
+                                    }
                                 }
                             }
-                        )
-                        
-                        if ($formulaeStartIndex -ne -1) {
-                            $output[($formulaeStartIndex+1)..$formulaeEndIndex] | ForEach-Object {
-                                [PSCustomObject]@{
-                                    Name = $_
-                                    Type = 'Formula'
-                                }
-                            }
-                        }
-                        
-                        if ($casksStartIndex -ne -1) {
-                            $output[($casksStartIndex+1)..($output.Length)] | ForEach-Object {
-                                [PSCustomObject]@{
-                                    Name = $_
-                                    Type = 'Cask'
+                            
+                            if ($casksStartIndex -ne -1) {
+                                $output[($casksStartIndex+1)..($output.Length)] | ForEach-Object {
+                                    [PSCustomObject]@{
+                                        Name = $_
+                                        Type = 'Cask'
+                                    }
                                 }
                             }
                         }
