@@ -17,10 +17,9 @@ $PackageInstallHandlers = @{
         param ( $output )
 
         if ($output -match 'Pouring') {
-            # Formula output - capture package and dependency name and version
-            $output | Select-String 'Pouring (?<name>\S+)(?<=\w)(-+)(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
+            # Formula output - capture package and dependency name and version pairs
+            $output | Select-String 'Pouring (?<name>\S+)(?<=\w)(-+)(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches {
                 $match = ($_.Groups | Where-Object Name -in 'name','version').Value
-
                 [PSCustomObject]@{
                     Name = $match[0]
                     Version = $match[1]
@@ -28,10 +27,9 @@ $PackageInstallHandlers = @{
             }
         } elseif ($output -match 'was successfully') {
             # Cask output - capture package only
-            $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches | ForEach-Object {
-                $match = ($_.Groups | Where-Object Name -eq 'name').Value
+            $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches {
                 [PSCustomObject]@{
-                    Name = $match
+                    Name = $_.Groups | Where-Object Name -eq 'name' | Select-Object -ExpandProperty Value
                 }
             }
         }
