@@ -60,7 +60,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 	}
 	Context 'with casks' {
 		BeforeAll {
-			$package = 'gimp'
+			$package = 'vlc'
 		}
 
 		It 'searches for the latest version of a package' {
@@ -108,7 +108,7 @@ Describe 'pipline-based package installation and uninstallation' {
 	}
 	Context 'with casks' {
 		BeforeAll {
-			$package = 'gimp'
+			$package = 'vlc'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -200,7 +200,7 @@ Describe 'package metadata retrieval' {
 	}
 	Context 'with casks' {
 		BeforeAll {
-			$package = 'gimp'
+			$package = 'vlc'
 		}
 
 		It 'returns package metadata' {
