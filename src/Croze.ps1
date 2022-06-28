@@ -41,20 +41,20 @@ $PackageInstallHandlers = @{
 # The general structure of this hashtable is to define noun-level attributes, which are -probably- common across all commands for the same noun, but still allow for customization at more specific verb-level defition for that noun.
 # The following three command attributes have the following order of precedence:
 # 	OriginalCommandElements will be MERGED in the order of Noun + Verb + Base
-#		Example: Noun HomeBrewSource's element 'source', Verb Register's element 'add', and Base elements are merged to become 'HomeBrew source add --limit-output --yes'
+#		Example: Noun HomebrewSource's element 'source', Verb Register's element 'add', and Base elements are merged to become 'Homebrew source add --limit-output --yes'
 # 	Parameters will be MERGED in the order of Noun + Verb + Base
-#		Example: Noun HomeBrewPackage's parameters for package name and version and Verb Install's parameter specifying source information are merged to become '<packageName> --version=<packageVersion> --source=<packageSource>'.
-#			These are then appended to the merged original command elements, to create 'HomeBrew install <packageName> --version=<packageVersion> --source=<packageSource> --limit-output --yes'
+#		Example: Noun HomebrewPackage's parameters for package name and version and Verb Install's parameter specifying source information are merged to become '<packageName> --version=<packageVersion> --source=<packageSource>'.
+#			These are then appended to the merged original command elements, to create 'Homebrew install <packageName> --version=<packageVersion> --source=<packageSource> --limit-output --yes'
 # 	OutputHandler sets will SUPERCEDE each other in the order of: Verb -beats-> Noun -beats-> Base. This allows reusability of PowerShell parsing code.
-#		Example: Noun HomeBrewPackage has inline output handler PowerShell code with complex regex that works for both Install-HomeBrewPackage and Uninstall-HomeBrewPackage, but Get-HomeBrewPackage's native output uses simple vertical bar delimiters.
-#		Example 2: The native commands for Register-HomeBrewSource and Unregister-HomeBrewSource don't return any output, and until Crescendo supports error handling by exit codes, a base required default output handler that doesn't do anything can be defined and reused in multiple places.
+#		Example: Noun HomebrewPackage has inline output handler PowerShell code with complex regex that works for both Install-HomebrewPackage and Uninstall-HomebrewPackage, but Get-HomebrewPackage's native output uses simple vertical bar delimiters.
+#		Example 2: The native commands for Register-HomebrewSource and Unregister-HomebrewSource don't return any output, and until Crescendo supports error handling by exit codes, a base required default output handler that doesn't do anything can be defined and reused in multiple places.
 $Commands = @(
     @{
-        Noun = 'HomeBrewTap'
+        Noun = 'HomebrewTap'
         Verbs = @(
             @{
                 Verb = 'Get'
-                Description = 'Return HomeBrew taps'
+                Description = 'Return Homebrew taps'
                 OriginalCommandElements = @('tap')
                 OutputHandlers = @{
                     ParameterSetName = 'Default'
@@ -72,7 +72,7 @@ $Commands = @(
             },
             @{
                 Verb = 'Register'
-                Description = 'Register a new HomeBrew tap'
+                Description = 'Register a new Homebrew tap'
                 OriginalCommandElements = @('tap')
                 Parameters = @(
                     @{
@@ -90,7 +90,7 @@ $Commands = @(
             },
             @{
                 Verb = 'Unregister'
-                Description = 'Unregister an existing HomeBrew tap'
+                Description = 'Unregister an existing Homebrew tap'
                 OriginalCommandElements = @('untap','-f')
                 Parameters = @(
                     @{
@@ -105,7 +105,7 @@ $Commands = @(
         )
     },
     @{
-        Noun = 'HomeBrewPackage'
+        Noun = 'HomebrewPackage'
         Parameters = @(
             @{
                 Name = 'Name'
@@ -129,13 +129,13 @@ $Commands = @(
         Verbs = @(
             @{
                 Verb = 'Install'
-                Description = 'Install a new package with HomeBrew'
+                Description = 'Install a new package with Homebrew'
                 OriginalCommandElements = @('install')
                 OutputHandlers = $PackageInstallHandlers
             },
             @{
                 Verb = 'Get'
-                Description = 'Get a list of installed HomeBrew packages'
+                Description = 'Get a list of installed Homebrew packages'
                 OriginalCommandElements = @('list','--versions')
                 DefaultParameterSetName = 'Default'
                 OutputHandlers = @{
@@ -165,7 +165,7 @@ $Commands = @(
             },
             @{
                 Verb = 'Find'
-                Description = 'Find a list of available HomeBrew packages'
+                Description = 'Find a list of available Homebrew packages'
                 OriginalCommandElements = @('search')
                 OutputHandlers = @{
                     ParameterSetName = 'Default'
@@ -230,17 +230,17 @@ $Commands = @(
             },
             @{
                 Verb = 'Uninstall'
-                Description = 'Uninstall an existing package with HomeBrew'
+                Description = 'Uninstall an existing package with Homebrew'
                 OriginalCommandElements = @('uninstall')
             }
         )
     },
     @{
-        Noun = 'HomeBrewPackageInfo'
+        Noun = 'HomebrewPackageInfo'
         Verbs = @(
             @{
                 Verb = 'Get'
-                Description = 'Shows information on a specific HomeBrew package'
+                Description = 'Shows information on a specific Homebrew package'
                 OriginalCommandElements = @('info','--json=v2')
                 Parameters = @(
                     @{

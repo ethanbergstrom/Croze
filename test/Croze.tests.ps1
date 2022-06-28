@@ -3,17 +3,17 @@
 Describe 'basic package search operations' {
 	Context 'without additional arguments' {
 		It 'gets a list of installed packages' {
-			Get-HomeBrewPackage | Should -Not -BeNullOrEmpty
+			Get-HomebrewPackage | Should -Not -BeNullOrEmpty
 		}
 	}
 	Context 'with formulae' {
 		It 'gets a list of installed packages' {
-			Get-HomeBrewPackage -Formula | Should -Not -BeNullOrEmpty
+			Get-HomebrewPackage -Formula | Should -Not -BeNullOrEmpty
 		}
 	}
 	Context 'with casks' {
 		It 'gets a list of installed packages' {
-			{Get-HomeBrewPackage -Cask} | Should -Not -Throw
+			{Get-HomebrewPackage -Cask} | Should -Not -Throw
 		}
 	}
 }
@@ -25,16 +25,16 @@ Describe 'DSC-compliant package installation and uninstallation' {
 		}
 
 		It 'searches for the latest version of a package' {
-			Find-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Find-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently installs the latest version of a package' {
-			Install-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Install-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'finds the locally installed package just installed' {
-			Get-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Get-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently uninstalls the locally installed package just installed' {
-			{Uninstall-HomeBrewPackage -Name $package} | Should -Not -Throw
+			{Uninstall-HomebrewPackage -Name $package} | Should -Not -Throw
 		}
 	}
 	Context 'with formulae' {
@@ -43,19 +43,19 @@ Describe 'DSC-compliant package installation and uninstallation' {
 		}
 
 		It 'searches for the latest version of a package' {
-			Find-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Find-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently installs the latest version of a package' {
-			Install-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Install-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'finds the locally installed package just installed' {
-			Get-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Get-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'does NOT find the locally installed package just installed with the wrong type flag' {
-			Get-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -BeNullOrEmpty
+			Get-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -BeNullOrEmpty
 		}
 		It 'silently uninstalls the locally installed package just installed' {
-			{Uninstall-HomeBrewPackage -Name $package -Formula} | Should -Not -Throw
+			{Uninstall-HomebrewPackage -Name $package -Formula} | Should -Not -Throw
 		}
 	}
 	Context 'with casks' {
@@ -64,19 +64,19 @@ Describe 'DSC-compliant package installation and uninstallation' {
 		}
 
 		It 'searches for the latest version of a package' {
-			Find-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Find-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently installs the latest version of a package' {
-			Install-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Install-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'finds the locally installed package just installed' {
-			Get-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Get-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'does NOT find the locally installed package just installed with the wrong type flag' {
-			Get-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -BeNullOrEmpty
+			Get-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -BeNullOrEmpty
 		}
 		It 'silently uninstalls the locally installed package just installed' {
-			{Uninstall-HomeBrewPackage -Name $package -Cask} | Should -Not -Throw
+			{Uninstall-HomebrewPackage -Name $package -Cask} | Should -Not -Throw
 		}
 	}
 }
@@ -88,10 +88,10 @@ Describe 'pipline-based package installation and uninstallation' {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -HaveCount 1
+			Find-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Install-HomebrewPackage | Should -HaveCount 1
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
-			{Get-HomeBrewPackage -Name $package | Uninstall-HomeBrewPackage} | Should -Not -Throw
+			{Get-HomebrewPackage -Name $package | Uninstall-HomebrewPackage} | Should -Not -Throw
 		}
 	}
 	Context 'with formulae' {
@@ -100,10 +100,10 @@ Describe 'pipline-based package installation and uninstallation' {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-HomeBrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -HaveCount 1
+			Find-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Install-HomebrewPackage | Should -HaveCount 1
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
-			{Get-HomeBrewPackage -Name $package -Formula | Uninstall-HomeBrewPackage} | Should -Not -Throw
+			{Get-HomebrewPackage -Name $package -Formula | Uninstall-HomebrewPackage} | Should -Not -Throw
 		}
 	}
 	Context 'with casks' {
@@ -112,10 +112,10 @@ Describe 'pipline-based package installation and uninstallation' {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-HomeBrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Install-HomeBrewPackage | Should -HaveCount 1
+			Find-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Install-HomebrewPackage | Should -HaveCount 1
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
-			{Get-HomeBrewPackage -Name $package -Cask | Uninstall-HomeBrewPackage} | Should -Not -Throw
+			{Get-HomebrewPackage -Name $package -Cask | Uninstall-HomebrewPackage} | Should -Not -Throw
 		}
 	}
 }
@@ -126,32 +126,32 @@ Describe 'pipline-based package installation and uninstallation' {
 # 		BeforeAll {
 # 			$package = 'tmux'
 # 			$version = '1.95'
-# 			Install-HomeBrewPackage -Name $package -Version $version
+# 			Install-HomebrewPackage -Name $package -Version $version
 # 		}
 # 		AfterAll {
-# 			Uninstall-HomeBrewPackage -Name $package
+# 			Uninstall-HomebrewPackage -Name $package
 # 		}
 
 # 		It 'upgrades a specific package to the latest version' {
-# 			Update-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Where-Object {[version]$_.version -gt [version]$version} | Should -Not -BeNullOrEmpty
+# 			Update-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Where-Object {[version]$_.version -gt [version]$version} | Should -Not -BeNullOrEmpty
 # 		}
 # 		It 'upgrades again, and returns no output, because everything is up to date' {
-# 			Update-HomeBrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Where-Object {[version]$_.version -gt [version]$version} | Should -BeNullOrEmpty
+# 			Update-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Where-Object {[version]$_.version -gt [version]$version} | Should -BeNullOrEmpty
 # 		}
 # 	}
 # }
 
-# Describe 'HomeBrew error handling' {
+# Describe 'Homebrew error handling' {
 # 	Context 'with formulae' {
 # 		BeforeAll {
 # 			$package = 'Cisco.*'
 # 		}
 
 # 		It 'searches for an ID that will never exist' {
-# 			{Find-HomeBrewPackage -Name $package} | Should -Not -Throw
+# 			{Find-HomebrewPackage -Name $package} | Should -Not -Throw
 # 		}
 # 		It 'searches for an ID that will never exist' {
-# 			{Get-HomeBrewPackage -Name $package} | Should -Not -Throw
+# 			{Get-HomebrewPackage -Name $package} | Should -Not -Throw
 # 		}
 # 	}
 # }
@@ -163,19 +163,19 @@ Describe "multi-source support" {
 	}
 
 	It 'registers an alternative tap, assuming just GitHub userame' {
-		{ Register-HomeBrewTap -Name $tapName } | Should -Not -Throw
-		Get-HomeBrewTap | Where-Object {$_.Name -eq $tapName} | Should -HaveCount 1
+		{ Register-HomebrewTap -Name $tapName } | Should -Not -Throw
+		Get-HomebrewTap | Where-Object {$_.Name -eq $tapName} | Should -HaveCount 1
 	}
 	It 'searches for and installs the latest version of a package from an alternate source' {
-		Find-HomeBrewPackage -Name $package | Should -Not -BeNullOrEmpty
-		Install-HomeBrewPackage -Name $package | Should -HaveCount 1
+		Find-HomebrewPackage -Name $package | Should -Not -BeNullOrEmpty
+		Install-HomebrewPackage -Name $package | Should -HaveCount 1
 	}
 	It 'finds and uninstalls a package installed from an alternate source' {
-		{ Get-HomeBrewPackage -Name $package | Uninstall-HomeBrewPackage } | Should -Not -Throw
+		{ Get-HomebrewPackage -Name $package | Uninstall-HomebrewPackage } | Should -Not -Throw
 	}
 	It 'unregisters an alternative tap with a full URL' {
-		Unregister-HomeBrewTap -Name $tapName
-		Get-HomeBrewTap | Where-Object {$_.Name -eq $tapName} | Should -BeNullOrEmpty
+		Unregister-HomebrewTap -Name $tapName
+		Get-HomebrewTap | Where-Object {$_.Name -eq $tapName} | Should -BeNullOrEmpty
 	}
 }
 
@@ -186,7 +186,7 @@ Describe 'package metadata retrieval' {
 		}
 
 		It 'returns package metadata' {
-			Get-HomeBrewPackageInfo -Name $package | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Get-HomebrewPackageInfo -Name $package | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 	Context 'with formulae' {
@@ -195,7 +195,7 @@ Describe 'package metadata retrieval' {
 		}
 
 		It 'returns package metadata' {
-			Get-HomeBrewPackageInfo -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
+			Get-HomebrewPackageInfo -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 	Context 'with casks' {
@@ -204,7 +204,7 @@ Describe 'package metadata retrieval' {
 		}
 
 		It 'returns package metadata' {
-			Get-HomeBrewPackageInfo -Name $package -Cask | Where-Object {$_.Token -eq $package} | Should -Not -BeNullOrEmpty
+			Get-HomebrewPackageInfo -Name $package -Cask | Where-Object {$_.Token -eq $package} | Should -Not -BeNullOrEmpty
 		}
 	}
 }

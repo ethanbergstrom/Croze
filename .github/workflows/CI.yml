@@ -67,11 +67,11 @@ jobs:
         with:
           name: test-results
           path: testResults.xml
-      - name: Upload HomeBrew logs
+      - name: Upload Homebrew logs
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: HomeBrew-logs
+          name: Homebrew-logs
           path: "~/Library/Logs/Homebrew/"
   Results:
     needs: Test
