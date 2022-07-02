@@ -1,6 +1,6 @@
 @{
 	RootModule = 'Croze.psm1'
-	ModuleVersion = '0.0.3'
+	ModuleVersion = '0.0.4'
 	GUID = '46caec03-e808-4fa2-b464-14677bb60c52'
 	Author = 'Ethan Bergstrom'
 	Copyright = '2022'
