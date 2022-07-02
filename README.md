@@ -45,7 +45,6 @@ Install-HomebrewPackage jq
 @('jq','firefox') | ForEach-Object { Install-HomebrewPackage $_ }
 ```
 
-
 ### Get list of installed packages
 ```PowerShell
 Get-HomebrewPackage jq
@@ -77,6 +76,7 @@ Uninstall-HomebrewPackage firefox
 ### Manage package sources
 ```PowerShell
 Register-HomebrewTap pyroscope-io/brew
+Get-HomebrewTap | Get-HomebrewTapInfo | Select-Object Name, Official, Remote
 Find-HomebrewPackage pyroscope-io/brew/pyroscope | Install-HomebrewPackage
 Unregister-HomebrewTap pyroscope-io/brew
 ```

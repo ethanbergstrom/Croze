@@ -137,7 +137,6 @@ $Commands = @(
                 Verb = 'Get'
                 Description = 'Get a list of installed Homebrew packages'
                 OriginalCommandElements = @('list','--versions')
-                DefaultParameterSetName = 'Default'
                 OutputHandlers = @{
                     ParameterSetName = 'Default'
                     Handler = {
@@ -262,7 +261,6 @@ $Commands = @(
                         Description = 'Cask'
                     }
                 )
-                DefaultParameterSetName = 'Default'
                 OutputHandlers = @{
                     ParameterSetName = 'Default'
                     Handler = {
@@ -272,6 +270,33 @@ $Commands = @(
                             $_.formulae
                             $_.casks
                         }
+                    }
+                }
+            }
+        )
+    }
+    @{
+        Noun = 'HomebrewTapInfo'
+        Verbs = @(
+            @{
+                Verb = 'Get'
+                Description = 'Shows information on a specific Homebrew package'
+                OriginalCommandElements = @('tap-info','--json')
+                Parameters = @(
+                    @{
+                        Name = 'Name'
+                        ParameterType = 'string'
+                        Description = 'Package Name'
+                        ValueFromPipelineByPropertyName = $true
+                    }
+                )
+                DefaultParameterSetName = 'Default'
+                OutputHandlers = @{
+                    ParameterSetName = 'Default'
+                    Handler = {
+                        param ( $output )
+
+                        $output | ConvertFrom-Json
                     }
                 }
             }

@@ -159,12 +159,16 @@ Describe 'pipline-based package installation and uninstallation' {
 Describe "multi-source support" {
 	BeforeAll {
 		$tapName = 'pyroscope-io/brew'
+		$tapLocation = 'https://github.com/pyroscope-io/homebrew-brew'
 		$package = join-path -path $tapName -ChildPath 'pyroscope'
 	}
 
 	It 'registers an alternative tap, assuming just GitHub userame' {
 		{ Register-HomebrewTap -Name $tapName } | Should -Not -Throw
 		Get-HomebrewTap | Where-Object {$_.Name -eq $tapName} | Should -HaveCount 1
+	}
+	It 'returns tap location information' {
+		Get-HomebrewTapInfo -Name $tapName | Select-Object -ExpandProperty remote | Should -Be $tapLocation
 	}
 	It 'searches for and installs the latest version of a package from an alternate source' {
 		Find-HomebrewPackage -Name $package | Should -Not -BeNullOrEmpty
