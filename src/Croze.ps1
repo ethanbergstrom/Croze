@@ -188,7 +188,8 @@ $Commands = @(
                             
                             # Determine the range of formulae output based on whether we also have cask output
                             $formulaeEndIndex = $(
-                                if ($formulaeStartIndex) {
+                                # Cant use a standard check here, because a valid value could be '0', which would evaluate to $false
+                                if ($formulaeStartIndex -ne $null) {
                                     if ($casksStartIndex) {
                                         # Stop capturing formulae output two rows before the start of the Cask index
                                         $casksStartIndex-2
@@ -200,7 +201,8 @@ $Commands = @(
                                 }
                             )
                             
-                            if ($formulaeStartIndex) {
+                            # Cant use a standard check here, because a valid value could be '0', which would evaluate to $false
+                            if ($formulaeStartIndex -ne $null) {
                                 $output[($formulaeStartIndex+1)..$formulaeEndIndex] | ForEach-Object {
                                     [PSCustomObject]@{
                                         Name = $_

@@ -21,7 +21,7 @@ Describe 'basic package search operations' {
 Describe 'DSC-compliant package installation and uninstallation' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'git'
 		}
 
 		It 'searches for the latest version of a package' {
@@ -39,7 +39,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'git'
 		}
 
 		It 'searches for the latest version of a package' {
@@ -84,7 +84,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 Describe 'pipline-based package installation and uninstallation' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'git'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -96,7 +96,7 @@ Describe 'pipline-based package installation and uninstallation' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'git'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -124,7 +124,7 @@ Describe 'pipline-based package installation and uninstallation' {
 # Describe 'package upgrade' {
 # 	Context 'with formulae' {
 # 		BeforeAll {
-# 			$package = 'tmux'
+# 			$package = 'git'
 # 			$version = '1.95'
 # 			Install-HomebrewPackage -Name $package -Version $version
 # 		}
@@ -186,7 +186,7 @@ Describe "multi-source support" {
 Describe 'package metadata retrieval' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'git'
 		}
 
 		It 'returns package metadata' {
@@ -195,7 +195,7 @@ Describe 'package metadata retrieval' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'git'
 		}
 
 		It 'returns package metadata' {
