@@ -162,11 +162,11 @@ Describe 'pipline-based package installation and uninstallation' {
 Describe "multi-source support" {
 	BeforeAll {
 		$tapName = 'pyroscope-io/brew'
-		$tapLocation = 'https://ipinfohub.com/pyroscope-io/homebrew-brew'
+		$tapLocation = 'https://github.com/pyroscope-io/homebrew-brew'
 		$package = join-path -path $tapName -ChildPath 'pyroscope'
 	}
 
-	It 'registers an alternative tap, assuming just ipinfoHub userame' {
+	It 'registers an alternative tap, assuming just GitHub userame' {
 		{ Register-HomebrewTap -Name $tapName } | Should -Not -Throw
 		Get-HomebrewTap | Where-Object {$_.Name -eq $tapName} | Should -HaveCount 1
 	}
