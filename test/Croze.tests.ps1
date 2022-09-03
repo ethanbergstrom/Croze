@@ -42,9 +42,6 @@ Describe 'DSC-compliant package installation and uninstallation' {
 			$package = 'ipinfo'
 		}
 
-		It 'finds the locally installed package if it already exists, and uninstalls it' {
-			Get-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
-		}
 		It 'searches for the latest version of a package' {
 			Find-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
