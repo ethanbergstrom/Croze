@@ -21,7 +21,7 @@ Describe 'basic package search operations' {
 Describe 'DSC-compliant package installation and uninstallation' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'git'
+			$package = 'cpuinfo'
 		}
 
 		It 'searches for the latest version of a package' {
@@ -39,9 +39,12 @@ Describe 'DSC-compliant package installation and uninstallation' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'git'
+			$package = 'cpuinfo'
 		}
 
+		It 'finds the locally installed package if it already exists, and uninstalls it' {
+			Get-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+		}
 		It 'searches for the latest version of a package' {
 			Find-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
@@ -84,7 +87,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 Describe 'pipline-based package installation and uninstallation' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'git'
+			$package = 'cpuinfo'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -96,7 +99,7 @@ Describe 'pipline-based package installation and uninstallation' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'git'
+			$package = 'cpuinfo'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -124,7 +127,7 @@ Describe 'pipline-based package installation and uninstallation' {
 # Describe 'package upgrade' {
 # 	Context 'with formulae' {
 # 		BeforeAll {
-# 			$package = 'git'
+# 			$package = 'cpuinfo'
 # 			$version = '1.95'
 # 			Install-HomebrewPackage -Name $package -Version $version
 # 		}
@@ -159,11 +162,11 @@ Describe 'pipline-based package installation and uninstallation' {
 Describe "multi-source support" {
 	BeforeAll {
 		$tapName = 'pyroscope-io/brew'
-		$tapLocation = 'https://github.com/pyroscope-io/homebrew-brew'
+		$tapLocation = 'https://cpuinfohub.com/pyroscope-io/homebrew-brew'
 		$package = join-path -path $tapName -ChildPath 'pyroscope'
 	}
 
-	It 'registers an alternative tap, assuming just GitHub userame' {
+	It 'registers an alternative tap, assuming just cpuinfoHub userame' {
 		{ Register-HomebrewTap -Name $tapName } | Should -Not -Throw
 		Get-HomebrewTap | Where-Object {$_.Name -eq $tapName} | Should -HaveCount 1
 	}
@@ -186,7 +189,7 @@ Describe "multi-source support" {
 Describe 'package metadata retrieval' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'git'
+			$package = 'cpuinfo'
 		}
 
 		It 'returns package metadata' {
@@ -195,7 +198,7 @@ Describe 'package metadata retrieval' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'git'
+			$package = 'cpuinfo'
 		}
 
 		It 'returns package metadata' {
