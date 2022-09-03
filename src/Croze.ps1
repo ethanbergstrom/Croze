@@ -211,7 +211,7 @@ $Commands = @(
                                 }
                             }
                             
-                            if ($casksStartIndex -ne -1) {
+                            if ($casksStartIndex -ne $null) {
                                 $output[($casksStartIndex+1)..($output.Length)] | ForEach-Object {
                                     [PSCustomObject]@{
                                         Name = $_
