@@ -132,6 +132,14 @@ $Commands = @(
                 Description = 'Install a new package with Homebrew'
                 OriginalCommandElements = @('install')
                 OutputHandlers = $PackageInstallHandlers
+                Parameters = @(
+                    @{
+                        Name = 'Force'
+                        OriginalName = '--force'
+                        ParameterType = 'switch'
+                        Description = 'Force'
+                    }
+                )
             },
             @{
                 Verb = 'Get'
