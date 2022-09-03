@@ -132,6 +132,14 @@ $Commands = @(
                 Description = 'Install a new package with Homebrew'
                 OriginalCommandElements = @('install')
                 OutputHandlers = $PackageInstallHandlers
+                Parameters = @(
+                    @{
+                        Name = 'Force'
+                        OriginalName = '--force'
+                        ParameterType = 'switch'
+                        Description = 'Force'
+                    }
+                )
             },
             @{
                 Verb = 'Get'
@@ -188,7 +196,8 @@ $Commands = @(
                             
                             # Determine the range of formulae output based on whether we also have cask output
                             $formulaeEndIndex = $(
-                                if ($formulaeStartIndex) {
+                                # Cant use a standard check here, because a valid value could be '0', which would evaluate to $false
+                                if ($formulaeStartIndex -ne $null) {
                                     if ($casksStartIndex) {
                                         # Stop capturing formulae output two rows before the start of the Cask index
                                         $casksStartIndex-2
@@ -200,7 +209,8 @@ $Commands = @(
                                 }
                             )
                             
-                            if ($formulaeStartIndex) {
+                            # Cant use a standard check here, because a valid value could be '0', which would evaluate to $false
+                            if ($formulaeStartIndex -ne $null) {
                                 $output[($formulaeStartIndex+1)..$formulaeEndIndex] | ForEach-Object {
                                     [PSCustomObject]@{
                                         Name = $_
@@ -209,7 +219,7 @@ $Commands = @(
                                 }
                             }
                             
-                            if ($casksStartIndex -ne -1) {
+                            if ($casksStartIndex -ne $null) {
                                 $output[($casksStartIndex+1)..($output.Length)] | ForEach-Object {
                                     [PSCustomObject]@{
                                         Name = $_

@@ -21,7 +21,7 @@ Describe 'basic package search operations' {
 Describe 'DSC-compliant package installation and uninstallation' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'ipinfo'
 		}
 
 		It 'searches for the latest version of a package' {
@@ -39,14 +39,14 @@ Describe 'DSC-compliant package installation and uninstallation' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'ipinfo'
 		}
 
 		It 'searches for the latest version of a package' {
 			Find-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently installs the latest version of a package' {
-			Install-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Install-HomebrewPackage -Name $package -Formula -Force | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'finds the locally installed package just installed' {
 			Get-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
@@ -67,7 +67,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 			Find-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'silently installs the latest version of a package' {
-			Install-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
+			Install-HomebrewPackage -Name $package -Cask -Force | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
 		}
 		It 'finds the locally installed package just installed' {
 			Get-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
@@ -84,7 +84,7 @@ Describe 'DSC-compliant package installation and uninstallation' {
 Describe 'pipline-based package installation and uninstallation' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'ipinfo'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
@@ -96,11 +96,11 @@ Describe 'pipline-based package installation and uninstallation' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'ipinfo'
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Install-HomebrewPackage | Should -HaveCount 1
+			Find-HomebrewPackage -Name $package -Formula | Where-Object {$_.Name -eq $package} | Install-HomebrewPackage -Force | Should -HaveCount 1
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
 			{Get-HomebrewPackage -Name $package -Formula | Uninstall-HomebrewPackage} | Should -Not -Throw
@@ -112,7 +112,7 @@ Describe 'pipline-based package installation and uninstallation' {
 		}
 
 		It 'searches for and silently installs the latest version of a package' {
-			Find-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Install-HomebrewPackage | Should -HaveCount 1
+			Find-HomebrewPackage -Name $package -Cask | Where-Object {$_.Name -eq $package} | Install-HomebrewPackage -Force | Should -HaveCount 1
 		}
 		It 'finds and silently uninstalls the locally installed package just installed' {
 			{Get-HomebrewPackage -Name $package -Cask | Uninstall-HomebrewPackage} | Should -Not -Throw
@@ -124,7 +124,7 @@ Describe 'pipline-based package installation and uninstallation' {
 # Describe 'package upgrade' {
 # 	Context 'with formulae' {
 # 		BeforeAll {
-# 			$package = 'tmux'
+# 			$package = 'ipinfo'
 # 			$version = '1.95'
 # 			Install-HomebrewPackage -Name $package -Version $version
 # 		}
@@ -186,7 +186,7 @@ Describe "multi-source support" {
 Describe 'package metadata retrieval' {
 	Context 'without additional arguments' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'ipinfo'
 		}
 
 		It 'returns package metadata' {
@@ -195,7 +195,7 @@ Describe 'package metadata retrieval' {
 	}
 	Context 'with formulae' {
 		BeforeAll {
-			$package = 'tmux'
+			$package = 'ipinfo'
 		}
 
 		It 'returns package metadata' {
