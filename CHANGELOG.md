@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2024-01-28
 ### Changed
 - Package type required on all `HomebrewPackage` noun cmdlets due to `brew` CLI output ambiguity
+- Upgrade to Cresendo 1.1 for module compilation (no functional changes expected)
+### Fixed
+- Package information emitted when installing from an external tap
 
 ## [0.0.5] - 2022-09-03
 ### Added
