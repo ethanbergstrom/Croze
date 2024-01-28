@@ -10,7 +10,7 @@ $BaseOutputHandlers = @{
         param ( $output )
 
         # Clear the Crescendo stderr queue of Homebrew's abuse of stderr
-        Pop-CrescendoNativeError
+        Pop-CrescendoNativeError | Out-Null
     }
 }
 
@@ -21,7 +21,7 @@ $PackageInstallHandlers = @(
             param ( $output )
 
             # Clear the Crescendo stderr queue of Homebrew's abuse of stderr
-            Pop-CrescendoNativeError
+            Pop-CrescendoNativeError | Out-Null
 
             $output | Select-String '🍺(.+)/(?<name>.+)/(?<version>.+):' | ForEach-Object -MemberName Matches | ForEach-Object {
                 $match = ($_.Groups | Where-Object Name -in 'name', 'version').Value
@@ -39,7 +39,7 @@ $PackageInstallHandlers = @(
             param ( $output )
 
             # Clear the Crescendo stderr queue of Homebrew's abuse of stderr
-            Pop-CrescendoNativeError
+            Pop-CrescendoNativeError | Out-Null
 
             $output | Select-String '(?<name>\S+) was successfully' | ForEach-Object -MemberName Matches | ForEach-Object {
                 $match = ($_.Groups | Where-Object Name -eq 'name').Value
