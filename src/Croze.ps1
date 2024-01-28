@@ -143,6 +143,7 @@ $Commands = @(
                 OriginalName     = '--formula'
                 ParameterType    = 'switch'
                 Description      = 'Formula'
+                ValueFromPipelineByPropertyName = $true
                 ParameterSetName = 'Formula'
             },
             @{
@@ -150,6 +151,7 @@ $Commands = @(
                 OriginalName     = '--cask'
                 ParameterType    = 'switch'
                 Description      = 'Cask'
+                ValueFromPipelineByPropertyName = $true
                 ParameterSetName = 'Cask'
             }
         )
@@ -197,7 +199,7 @@ $Commands = @(
                             $output | ForEach-Object {
                                 [PSCustomObject]@{
                                     Name = $_
-                                    Type = 'Formula'
+                                    Formula = $true
                                 }
                             }
                         }
@@ -210,7 +212,7 @@ $Commands = @(
                             $output | ForEach-Object {
                                 [PSCustomObject]@{
                                     Name = $_
-                                    Type = 'Cask'
+                                    Cask = $true
                                 }
                             }
                         }
