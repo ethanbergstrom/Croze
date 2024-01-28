@@ -1,11 +1,6 @@
 ﻿Import-Module Croze
 
 Describe 'basic package search operations' {
-	Context 'without additional arguments' {
-		It 'gets a list of installed packages' {
-			Get-HomebrewPackage | Should -Not -BeNullOrEmpty
-		}
-	}
 	Context 'with formulae' {
 		It 'gets a list of installed packages' {
 			Get-HomebrewPackage -Formula | Should -Not -BeNullOrEmpty
@@ -19,24 +14,6 @@ Describe 'basic package search operations' {
 }
 
 Describe 'DSC-compliant package installation and uninstallation' {
-	Context 'without additional arguments' {
-		BeforeAll {
-			$package = 'ipinfo'
-		}
-
-		It 'searches for the latest version of a package' {
-			Find-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
-		}
-		It 'silently installs the latest version of a package' {
-			Install-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
-		}
-		It 'finds the locally installed package just installed' {
-			Get-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Should -HaveCount 1
-		}
-		It 'silently uninstalls the locally installed package just installed' {
-			{Uninstall-HomebrewPackage -Name $package} | Should -Not -Throw
-		}
-	}
 	Context 'with formulae' {
 		BeforeAll {
 			$package = 'ipinfo'
@@ -82,18 +59,6 @@ Describe 'DSC-compliant package installation and uninstallation' {
 }
 
 Describe 'pipline-based package installation and uninstallation' {
-	Context 'without additional arguments' {
-		BeforeAll {
-			$package = 'ipinfo'
-		}
-
-		It 'searches for and silently installs the latest version of a package' {
-			Find-HomebrewPackage -Name $package | Where-Object {$_.Name -eq $package} | Install-HomebrewPackage | Should -HaveCount 1
-		}
-		It 'finds and silently uninstalls the locally installed package just installed' {
-			{Get-HomebrewPackage -Name $package | Uninstall-HomebrewPackage} | Should -Not -Throw
-		}
-	}
 	Context 'with formulae' {
 		BeforeAll {
 			$package = 'ipinfo'
@@ -171,11 +136,11 @@ Describe "multi-source support" {
 		Get-HomebrewTapInfo -Name $tapName | Select-Object -ExpandProperty remote | Should -Be $tapLocation
 	}
 	It 'searches for and installs the latest version of a package from an alternate source' {
-		Find-HomebrewPackage -Name $package | Should -Not -BeNullOrEmpty
-		Install-HomebrewPackage -Name $package | Should -HaveCount 1
+		Find-HomebrewPackage -Name $package -Formula | Should -Not -BeNullOrEmpty
+		Install-HomebrewPackage -Name $package -Formula | Should -HaveCount 1
 	}
 	It 'finds and uninstalls a package installed from an alternate source' {
-		{ Get-HomebrewPackage -Name $package | Uninstall-HomebrewPackage } | Should -Not -Throw
+		{ Get-HomebrewPackage -Name $package -Formula | Uninstall-HomebrewPackage } | Should -Not -Throw
 	}
 	It 'unregisters an alternative tap with a full URL' {
 		Unregister-HomebrewTap -Name $tapName
@@ -184,15 +149,6 @@ Describe "multi-source support" {
 }
 
 Describe 'package metadata retrieval' {
-	Context 'without additional arguments' {
-		BeforeAll {
-			$package = 'ipinfo'
-		}
-
-		It 'returns package metadata' {
-			Get-HomebrewPackageInfo -Name $package | Where-Object {$_.Name -eq $package} | Should -Not -BeNullOrEmpty
-		}
-	}
 	Context 'with formulae' {
 		BeforeAll {
 			$package = 'ipinfo'
