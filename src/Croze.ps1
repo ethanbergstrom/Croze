@@ -11,26 +11,6 @@ $BaseOutputHandlers = @{
     }
 }
 
-$PackageGetHandler = {
-    param ( $output )
-
-    $output | Where-Object {$_} | ConvertFrom-StringData -Delimiter ' ' | ForEach-Object {
-        # Brew supports installing multiple versions side-by-side, but instead of listing them as separate rows, it puts multiple versions on the same row. 
-        # To present this package data in a way that's idiomatic to PowerShell, we need to list each version as a separate object:
-        $_.GetEnumerator() | ForEach-Object {
-            $name = $_.Name
-            $_.Value -split ' ' | Select-Object -Property @{
-                Name       = 'Name'
-                Expression = { $name }
-            },
-            @{
-                Name       = 'Version'
-                Expression = { $_ }
-            }
-        }
-    }
-}
-
 $PackageInstallHandlers = @(
     @{
         ParameterSetName = 'Formula'
@@ -139,20 +119,20 @@ $Commands = @(
                 ParameterSetName                = @('Formula', 'Cask')
             },
             @{
-                Name             = 'Formula'
-                OriginalName     = '--formula'
-                ParameterType    = 'switch'
-                Description      = 'Formula'
+                Name                            = 'Formula'
+                OriginalName                    = '--formula'
+                ParameterType                   = 'switch'
+                Description                     = 'Formula'
                 ValueFromPipelineByPropertyName = $true
-                ParameterSetName = 'Formula'
+                ParameterSetName                = 'Formula'
             },
             @{
-                Name             = 'Cask'
-                OriginalName     = '--cask'
-                ParameterType    = 'switch'
-                Description      = 'Cask'
+                Name                            = 'Cask'
+                OriginalName                    = '--cask'
+                ParameterType                   = 'switch'
+                Description                     = 'Cask'
                 ValueFromPipelineByPropertyName = $true
-                ParameterSetName = 'Cask'
+                ParameterSetName                = 'Cask'
             }
         )
         Verbs      = @(
@@ -178,11 +158,55 @@ $Commands = @(
                 OutputHandlers          = @(
                     @{
                         ParameterSetName = 'Formula'
-                        Handler          = $PackageGetHandler
+                        Handler          = {
+                            param ( $output )
+                        
+                            $output | Where-Object { $_ } | ConvertFrom-StringData -Delimiter ' ' | ForEach-Object {
+                                # Brew supports installing multiple versions side-by-side, but instead of listing them as separate rows, it puts multiple versions on the same row. 
+                                # To present this package data in a way that's idiomatic to PowerShell, we need to list each version as a separate object:
+                                $_.GetEnumerator() | ForEach-Object {
+                                    $name = $_.Name
+                                    $_.Value -split ' ' | Select-Object -Property @{
+                                        Name       = 'Name'
+                                        Expression = { $name }
+                                    },
+                                    @{
+                                        Name       = 'Version'
+                                        Expression = { $_ }
+                                    },
+                                    @{
+                                        Name       = 'Formula'
+                                        Expression = { $true }
+                                    }
+                                }
+                            }
+                        }
                     },
                     @{
                         ParameterSetName = 'Cask'
-                        Handler          = $PackageGetHandler
+                        Handler          = {
+                            param ( $output )
+                        
+                            $output | Where-Object { $_ } | ConvertFrom-StringData -Delimiter ' ' | ForEach-Object {
+                                # Brew supports installing multiple versions side-by-side, but instead of listing them as separate rows, it puts multiple versions on the same row. 
+                                # To present this package data in a way that's idiomatic to PowerShell, we need to list each version as a separate object:
+                                $_.GetEnumerator() | ForEach-Object {
+                                    $name = $_.Name
+                                    $_.Value -split ' ' | Select-Object -Property @{
+                                        Name       = 'Name'
+                                        Expression = { $name }
+                                    },
+                                    @{
+                                        Name       = 'Version'
+                                        Expression = { $_ }
+                                    },
+                                    @{
+                                        Name       = 'Cask'
+                                        Expression = { $true }
+                                    }
+                                }
+                            }
+                        }
                     }
                 )
             },
@@ -198,7 +222,7 @@ $Commands = @(
 
                             $output | ForEach-Object {
                                 [PSCustomObject]@{
-                                    Name = $_
+                                    Name    = $_
                                     Formula = $true
                                 }
                             }
