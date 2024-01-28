@@ -229,7 +229,7 @@ $Commands = @(
                         Handler          = {
                             param ($output)
 
-                            $output | ForEach-Object {
+                            $output | Where-Object {$_} | ForEach-Object {
                                 [PSCustomObject]@{
                                     Name    = $_
                                     Formula = $true
@@ -242,7 +242,7 @@ $Commands = @(
                         Handler          = {
                             param ($output)
 
-                            $output | ForEach-Object {
+                            $output | Where-Object {$_} | ForEach-Object {
                                 [PSCustomObject]@{
                                     Name = $_
                                     Cask = $true
