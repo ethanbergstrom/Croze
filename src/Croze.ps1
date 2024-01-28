@@ -14,7 +14,7 @@ $BaseOutputHandlers = @{
 $PackageGetHandler = {
     param ( $output )
 
-    $output | ConvertFrom-StringData -Delimiter ' ' | ForEach-Object {
+    $output | Where-Object {$_} | ConvertFrom-StringData -Delimiter ' ' | ForEach-Object {
         # Brew supports installing multiple versions side-by-side, but instead of listing them as separate rows, it puts multiple versions on the same row. 
         # To present this package data in a way that's idiomatic to PowerShell, we need to list each version as a separate object:
         $_.GetEnumerator() | ForEach-Object {
