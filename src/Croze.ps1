@@ -17,7 +17,7 @@ $PackageInstallHandlers = @(
         Handler          = {
             param ( $output )
 
-            $output | Select-String 'Pouring (?<name>\S+)(?<=\w)(-+)(?<version>\d+\.{0,1}\d*\.(?=\d)\d*)' | ForEach-Object -MemberName Matches | ForEach-Object {
+            $output | Select-String '🍺(.+)/(?<name>.+)/(?<version>.+):' | ForEach-Object -MemberName Matches | ForEach-Object {
                 $match = ($_.Groups | Where-Object Name -in 'name', 'version').Value
 
                 [PSCustomObject]@{
