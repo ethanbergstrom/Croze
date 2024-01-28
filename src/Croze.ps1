@@ -12,22 +12,22 @@ $BaseOutputHandlers = @{
 }
 
 $PackageGetHandler = {
-    if ($output) {
-        $output | ConvertFrom-StringData -Delimiter ' ' | ForEach-Object {
-            # Brew supports installing multiple versions side-by-side, but instead of listing them as separate rows, it puts multiple versions on the same row. 
-            # To present this package data in a way that's idiomatic to PowerShell, we need to list each version as a separate object:
-            $_.GetEnumerator() | ForEach-Object {
-                $name = $_.Name
-                $_.Value -split ' ' | Select-Object -Property @{
-                    Name       = 'Name'
-                    Expression = { $name }
-                },
-                @{
-                    Name       = 'Version'
-                    Expression = { $_ }
-                }
+    param ( $output )
+
+    $output | ConvertFrom-StringData -Delimiter ' ' | ForEach-Object {
+        # Brew supports installing multiple versions side-by-side, but instead of listing them as separate rows, it puts multiple versions on the same row. 
+        # To present this package data in a way that's idiomatic to PowerShell, we need to list each version as a separate object:
+        $_.GetEnumerator() | ForEach-Object {
+            $name = $_.Name
+            $_.Value -split ' ' | Select-Object -Property @{
+                Name       = 'Name'
+                Expression = { $name }
+            },
+            @{
+                Name       = 'Version'
+                Expression = { $_ }
             }
-        } | Select-Object Name, Version
+        }
     }
 }
 
