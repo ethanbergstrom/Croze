@@ -298,8 +298,8 @@ $Commands = @(
                         param ( $output )
 
                         $output | ConvertFrom-Json | ForEach-Object {
-                            $_.formulae
-                            $_.casks
+                            $_.formulae | Select-Object *, @{Name = 'Formula'; Expression = { $true } }
+                            $_.casks | Select-Object *, @{Name = 'Cask'; Expression = { $true } } 
                         }
                     }
                 }
